@@ -11,49 +11,62 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.util.Random;
+import algorithms.insertionsort;
 
 public class Main extends Application /* implements EventHandler<ActionEvent> */ {
 
-    Button myFirstButton, mySecondButton;
+    Button myFirstButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Welcome Compadre");
 
+        // Initialize list to sort
+        int[] myList;
+        Random rand = new Random(); // to fill array with random values
+        int upperBound = 10;
+        myList = new int[] {rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound), rand.nextInt(upperBound)};
+        printIntList(myList); // print to view contents pre-sort
         // Button assignments
-        myFirstButton = new Button("My First Button!");
-        mySecondButton = new Button("My Second Button!");
-
-        // Alternative way of handling events
-        myFirstButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Hola Senor!");
-            }
-        });
-
-        mySecondButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Hi Mister!");
-            }
+        myFirstButton = new Button("Sort Button");
+        // Easiest way to handle events (Lambda Expressions)
+        myFirstButton.setOnAction(e -> {
+            int[] newList = myList;
+            insertionsort insertionsorter = new insertionsort();
+            newList = insertionsorter.sortNumbers(newList);
+            printIntList(newList); // print after sort
         });
 
         StackPane layout = new StackPane();
         layout.getChildren().add(myFirstButton);
-        layout.getChildren().add(mySecondButton);
-
         primaryStage.setScene(new Scene(layout, 1200, 720));
         primaryStage.show();
     }
-//    First portrayed way to handle events
+//    One way to handle events
 //    @Override
 //    public void handle(ActionEvent actionEvent) {
 //        if (actionEvent.getSource() == myButton) {
 //            System.out.println("Hola Senor!");
 //        }
 //    }
+
+//    // Alternative way of handling events (anonymous inner classes)
+//        myFirstButton.setOnAction(new EventHandler<ActionEvent>() {
+//        @Override
+//        public void handle(ActionEvent actionEvent) {
+//            System.out.println("Hola Senor!");
+//        }
+//    });
+
+    // prints list of int
+    public void printIntList(int[] list){
+        for (int number: list) {
+            System.out.print(number + " ");
+        }
+        System.out.println();
+    }
 
     public static void main(String[] args) {
         launch(args);
